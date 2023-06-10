@@ -12,6 +12,9 @@ class PathState(StatesGroup):
     level_7 = State()
     level_8 = State()
     level_9 = State()
+    level_10 = State()
+    level_11 = State()
+    level_12 = State()
 
 
 

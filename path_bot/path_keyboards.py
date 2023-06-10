@@ -32,9 +32,9 @@ async def create_keyboard(directory: Path):
             else:
                 icon = FOLDER_ICON
             if re.match(r'[А-Яа-я]', item.name):
-                if len(item.name) > 35:
+                if len(item.name) > 30:
                     icon = CROSS_ICON if icon != LARGE_FILE else LARGE_FILE
-                kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=f"{item.name[:35]}"))
+                kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=f"{item.name[:30]}"))
             else:
                 if len(item.name) > 64:
                     icon = CROSS_ICON

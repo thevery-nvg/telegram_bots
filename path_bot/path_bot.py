@@ -16,7 +16,7 @@ async def _create_path(data):
 
 
 async def _clear_data(data: dict):
-    for i in range(9, -1, -1):
+    for i in range(12, -1, -1):
         _key = f"level_{i}"
         if data.get(_key):
             del data[_key]
@@ -71,7 +71,7 @@ async def start_state(message: types.Message, state: FSMContext):
 @dp.message_handler(commands=['cancel'], state='*')
 async def cancel_state(message: types.Message, state: FSMContext):
     await bot.send_message(message.from_user.id, 'Отменено!!!')
-    await bot.send_message(message.from_user.id, 'Для начала нажмите /start')
+    await bot.send_message(message.from_user.id, 'Чтобы начать нажмите: /start')
     await state.reset_state()
 
 
@@ -164,6 +164,30 @@ async def set_level_8(call: types.CallbackQuery, state: FSMContext):
 async def set_level_9(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         data['level_9'] = call.data
+        kb = await _create_path(data)
+    await state_actions(call, state, kb)
+
+
+@dp.callback_query_handler(state=PathState.level_10)
+async def set_level_10(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        data['level_10'] = call.data
+        kb = await _create_path(data)
+    await state_actions(call, state, kb)
+
+
+@dp.callback_query_handler(state=PathState.level_11)
+async def set_level_11(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        data['level_11'] = call.data
+        kb = await _create_path(data)
+    await state_actions(call, state, kb)
+
+
+@dp.callback_query_handler(state=PathState.level_12)
+async def set_level_12(call: types.CallbackQuery, state: FSMContext):
+    async with state.proxy() as data:
+        data['level_12'] = call.data
         kb = await _create_path(data)
     await state_actions(call, state, kb)
     await state.finish()
