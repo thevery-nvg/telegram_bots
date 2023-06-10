@@ -4,7 +4,7 @@ import os
 from pathlib import Path
 
 from create_bot import bot, dp
-from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
+from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard,D
 from path_states import PathState
 
 
@@ -91,7 +91,7 @@ async def goback_state(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(state=PathState.level_0)
 async def set_level_0(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        data['level_0'] = call.data
+        data['level_0'] = D[call.data]
         kb = await _create_path(data)
     await state_actions(call, state, kb)
 
@@ -99,7 +99,7 @@ async def set_level_0(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state=PathState.level_1)
 async def set_level_1(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        data['level_1'] = call.data
+        data['level_1'] = D[call.data]
         kb = await _create_path(data)
     await state_actions(call, state, kb)
 
@@ -107,7 +107,7 @@ async def set_level_1(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state=PathState.level_2)
 async def set_level_2(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        data['level_2'] = call.data
+        data['level_2'] = D[call.data]
         kb = await _create_path(data)
     await state_actions(call, state, kb)
 
@@ -115,7 +115,7 @@ async def set_level_2(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state=PathState.level_3)
 async def set_level_3(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        data['level_3'] = call.data
+        data['level_3'] = D[call.data]
         kb = await _create_path(data)
     await state_actions(call, state, kb)
 
@@ -123,7 +123,7 @@ async def set_level_3(call: types.CallbackQuery, state: FSMContext):
 @dp.callback_query_handler(state=PathState.level_4)
 async def set_level_4(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
-        data['level_4'] = call.data
+        data['level_4'] = D[call.data]
         kb = await _create_path(data)
     await state_actions(call, state, kb)
 
