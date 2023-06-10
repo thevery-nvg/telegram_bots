@@ -3,7 +3,7 @@ import os
 from aiogram.dispatcher import FSMContext
 
 from create_bot import bot, dp
-from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
+from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard, D
 from pathlib import Path
 from path_states import PathState
 
@@ -50,7 +50,6 @@ async def state_actions(call, state, kb):
         await get_file(call, state, kb)
     else:
         await bot.send_message(call.from_user.id, kb, reply_markup=await create_keyboard(kb))
-        # await call.message.reply(kb, reply_markup=await create_keyboard(kb))
         await PathState.next()
 
 
