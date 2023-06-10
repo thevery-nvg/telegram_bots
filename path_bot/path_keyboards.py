@@ -17,10 +17,9 @@ async def create_disks_keyboard():
     return disc_choose
 
 
-FOLDER_ICON = u'\U0001F4E6'
-FILE_ICON = u'\U00002705'
-CROSS_ICON = u'\U0000274C'
-LARGE_FILE = u'\U0001F534'
+FOLDER_ICON = '📁'
+FILE_ICON = '🟢'
+LARGE_FILE = '🔴'
 
 
 async def create_keyboard(directory: Path):
@@ -46,5 +45,5 @@ async def create_keyboard(directory: Path):
             kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=item_hash))
         return kb
     except FileNotFoundError:
-        return kb.add(InlineKeyboardButton(f"{CROSS_ICON}TOO LARGE NAME, PRESS /back{CROSS_ICON}",
+        return kb.add(InlineKeyboardButton(f"❌TOO LARGE NAME, PRESS /back❌",
                                            callback_data=f"FileNotFoundError"))

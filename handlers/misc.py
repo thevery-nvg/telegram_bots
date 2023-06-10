@@ -18,18 +18,17 @@ async def contacts_button(message: types.Message):
     await message.answer('Нет контактов')
 
 
-# @dp.callback_query_handler()
 async def callback_query_keyboard(callback_query: types.CallbackQuery):
-    if callback_query.data == 't-shirt':
-        await bot.send_message(chat_id=callback_query.from_user.id, text='You are choose t-shirts')
-    elif callback_query.data == 'pants':
-        await bot.send_message(chat_id=callback_query.from_user.id, text='You are choose pants')
-    elif callback_query.data == 'boots':
-        await bot.send_message(chat_id=callback_query.from_user.id, text='You are choose boots')
-    elif callback_query.data == 'misc':
-        await bot.send_message(chat_id=callback_query.from_user.id, text='You are choose misc')
+    options = {
+        't-shirt': 'You are choose t-shirts',
+        'pants': 'You are choose pants',
+        'misc': 'You are choose misc',
+        'boots': 'You are choose boots'
 
-
+    }
+    message_text = options.get(callback_query.data)
+    if message_text:
+        await bot.send_message(chat_id=callback_query.from_user.id, text=message_text)
 
 
 def register_misc_handlers(dp: Dispatcher):
