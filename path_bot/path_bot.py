@@ -6,7 +6,8 @@ from pathlib import Path
 from aiogram.utils.exceptions import BadRequest
 
 from create_bot import bot, dp
-from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard,D
+from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
+from const import D, img_formats,video_formats
 from path_states import PathState
 
 
@@ -25,16 +26,19 @@ async def _clear_data(data: dict):
             break
 
 
-
-
-async def get_file(call, state, kb):
+async def send_file(call, state, kb):
     if os.stat(Path(kb)).st_size > 5000000:
         await bot.send_message(call.from_user.id, f'Слишком большой файл (более 50мб)')
     else:
         try:
-            await bot.send_document(call.from_user.id, open(Path(kb), 'rb'))
+            if Path(kb).suffix in img_formats:
+                await bot.send_photo(call.from_user.id, open(Path(kb), 'rb'))
+            elif Path(kb).suffix in video_formats:
+                await bot.send_video(call.from_user.id, open(Path(kb), 'rb'))
+            else:
+                await bot.send_document(call.from_user.id, open(Path(kb), 'rb'))
         except BadRequest:
-            await bot.send_message(call.from_user.id,"Пустой файл!")
+            await bot.send_message(call.from_user.id, "Пустой файл!")
     D.clear()
     await bot.send_message(call.from_user.id, 'Чтобы начать нажмите: /start')
     await state.reset_state()
@@ -42,7 +46,7 @@ async def get_file(call, state, kb):
 
 async def state_actions(call, state, kb):
     if kb.is_file():
-        await get_file(call, state, kb)
+        await send_file(call, state, kb)
     else:
         await bot.send_message(call.from_user.id, kb, reply_markup=await create_keyboard(kb))
         await PathState.next()
@@ -54,7 +58,6 @@ def on_startup():
 
 @dp.message_handler(commands=['start'])
 async def start_state(message: types.Message, state: FSMContext):
-    print(D)
     if message.from_user.id in [int(os.getenv('ADMIN_1_ID')), int(os.getenv('ADMIN_2_ID'))]:
         await state.set_state(PathState.level_0)
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
