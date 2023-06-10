@@ -24,7 +24,6 @@ CROSS_ICON = u'\U0000274C'
 async def create_keyboard(directory: Path):
     kb = InlineKeyboardMarkup(row_width=1)
     for item in directory.iterdir():
-        t = ''
         if item.is_file():
             icon = FILE_ICON
             if os.stat(item).st_size > 5000000:
@@ -33,6 +32,5 @@ async def create_keyboard(directory: Path):
             icon = FOLDER_ICON
         if len(item.name) > 35:
             icon = CROSS_ICON
-            t = '...'
-        kb.add(InlineKeyboardButton(f"{item.name[:35]}{t} {icon}", callback_data=f"{item.name[:35]}"))
+        kb.add(InlineKeyboardButton(f"{item.name} {icon}", callback_data=f"{item.name[:30]}"))
     return kb

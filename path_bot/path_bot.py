@@ -14,12 +14,14 @@ async def _create_path(data):
         r += data[i] + "\\\\"
     return Path(r)
 
-async def _clear_data(data:dict):
-    for i in range(9,-1,-1):
+
+async def _clear_data(data: dict):
+    for i in range(9, -1, -1):
         _key = f"level_{i}"
         if data.get(_key):
             del data[_key]
             break
+
 
 # @dp.callback_query_handler()
 # async def callback_query_keyboard(callback_query: types.CallbackQuery):
@@ -47,7 +49,7 @@ async def state_actions(call, state, kb):
     if kb.is_file():
         await get_file(call, state, kb)
     else:
-        await bot.send_message(call.from_user.id,kb,reply_markup=await create_keyboard(kb))
+        await bot.send_message(call.from_user.id, kb, reply_markup=await create_keyboard(kb))
         # await call.message.reply(kb, reply_markup=await create_keyboard(kb))
         await PathState.next()
 
@@ -76,20 +78,16 @@ async def cancel_state(message: types.Message, state: FSMContext):
 
 
 @dp.message_handler(commands=['back'], state='*')
-async def cancel_state(message: types.Message, state: FSMContext):
+async def goback_state(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         await _clear_data(data)
         if data:
             kb = await _create_path(data)
             await PathState.previous()
-            await bot.send_message(message.from_user.id, kb,reply_markup=await create_keyboard(kb))
+            await bot.send_message(message.from_user.id, kb, reply_markup=await create_keyboard(kb))
         else:
             await state.set_state(PathState.level_0)
             await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
-
-
-
-
 
 
 @dp.callback_query_handler(state=PathState.level_0)
