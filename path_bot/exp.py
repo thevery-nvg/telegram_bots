@@ -1,10 +1,9 @@
 import sys
 from pathlib import Path
 # mov ='E:\\Movies'
-steam = "D:\\Steam\\crashhandler.dll"
-s= "К"
-print(sys.getsizeof(Path(steam).name))
-print(sys.getsizeof(s))
+steam = 'C:\\Users\\box7\\Documents'
+for i in Path(steam).iterdir():
+    print(i.name)
 # s_mov =set()
 # s_steam =set()
 # for i in Path(mov).iterdir():
@@ -16,5 +15,10 @@ print(sys.getsizeof(s))
 #         s_steam.add(k)
 # print(s_mov)
 # print(s_mov-s_steam)
-
-
+import random
+s =''
+import string
+vars = list(string.ascii_letters+string.digits+'!#$%&()+,-.;=@[]^_`{}~')
+for _ in range(70):
+    s+=random.choice(vars)
+print(s)

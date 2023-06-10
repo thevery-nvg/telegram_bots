@@ -7,13 +7,10 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeybo
 
 start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add('/start').insert('/back').insert('/cancel')
 
-D = dict()
-
 
 async def create_disks_keyboard():
     disc_choose = InlineKeyboardMarkup(row_width=len(psutil.disk_partitions()))
     for item in psutil.disk_partitions():
-        D[item.device] = str(hash(item.device))
         disc_choose.insert(InlineKeyboardButton(item.device, callback_data=item.device))
     return disc_choose
 
@@ -35,10 +32,12 @@ async def create_keyboard(directory: Path):
             else:
                 icon = FOLDER_ICON
             if re.match(r'[А-Яа-я]', item.name):
-                if len(item.name) > 30: icon = CROSS_ICON if icon != LARGE_FILE else LARGE_FILE
-                kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=f"{item.name[:30]}"))
+                if len(item.name) > 35:
+                    icon = CROSS_ICON if icon != LARGE_FILE else LARGE_FILE
+                kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=f"{item.name[:35]}"))
             else:
-                if len(item.name) > 64: icon = CROSS_ICON
+                if len(item.name) > 64:
+                    icon = CROSS_ICON
                 kb.add(InlineKeyboardButton(f"{icon}{item.name}", callback_data=f"{item.name[:64]}"))
         return kb
     except FileNotFoundError:

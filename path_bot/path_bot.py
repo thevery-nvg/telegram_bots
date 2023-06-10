@@ -1,10 +1,10 @@
 from aiogram import executor, types
-import os
 from aiogram.dispatcher import FSMContext
+import os
+from pathlib import Path
 
 from create_bot import bot, dp
-from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard, D
-from pathlib import Path
+from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
 from path_states import PathState
 
 
@@ -38,10 +38,9 @@ async def _clear_data(data: dict):
 async def get_file(call, state, kb):
     if os.stat(Path(kb)).st_size > 5000000:
         await bot.send_message(call.from_user.id, f'Слишком большой файл (более 50мб)')
-        await bot.send_message(call.from_user.id, 'Чтобы начать нажмите: /start')
     else:
         await bot.send_document(call.from_user.id, open(Path(kb), 'rb'))
-        await bot.send_message(call.from_user.id, 'Чтобы начать нажмите: /start')
+    await bot.send_message(call.from_user.id, 'Чтобы начать нажмите: /start')
     await state.reset_state()
 
 
@@ -61,19 +60,19 @@ def on_startup():
 async def start_state(message: types.Message, state: FSMContext):
     if message.from_user.id in [int(os.getenv('ADMIN_1_ID')), int(os.getenv('ADMIN_2_ID'))]:
         await state.set_state(PathState.level_0)
-        await bot.send_message(message.from_user.id, "Здравствуйту!!", reply_markup=start_keyboard)
+        await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
     else:
         await bot.send_sticker(message.from_user.id,
                                sticker='CAACAgIAAxkBAAEJQc1kghXlYMaCK_hMxxuGzLgosnSQWQAC9QADVp29Cq5uEBf1pScoLwQ')
-        await bot.send_message(message.from_user.id, 'Ты кто такой, я вас не звал, идите нахуй')
+        await bot.send_message(message.from_user.id, 'Вы кто такие, я вас не звал, идите нахуй!!!')
 
 
 @dp.message_handler(commands=['cancel'], state='*')
 async def cancel_state(message: types.Message, state: FSMContext):
-    await bot.send_message(message.from_user.id, 'Отменено')
+    await bot.send_message(message.from_user.id, 'Отменено!!!')
+    await bot.send_message(message.from_user.id, 'Для начала нажмите /start')
     await state.reset_state()
-    await start_state(message, state)
 
 
 @dp.message_handler(commands=['back'], state='*')
