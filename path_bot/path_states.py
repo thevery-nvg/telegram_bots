@@ -2,7 +2,7 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils.exceptions import BadRequest
 from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
-from create_bot import bot
+from create_bot import bot, dp
 from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
 from const import D, img_formats, video_formats
 from pathlib import Path
@@ -70,7 +70,7 @@ async def _state_actions(call, state, kb):
 
 
 async def start_state(message: types.Message):
-    if message.from_user.id == int(os.getenv('ADMIN_ID')):
+    if message.from_user.id ==os.getenv('ADMIN_ID'):
         await PathState.level_0.set()
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
