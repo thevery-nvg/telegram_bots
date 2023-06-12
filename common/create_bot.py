@@ -6,3 +6,7 @@ storage = MemoryStorage()
 load_dotenv()
 bot = Bot(os.getenv('TOKEN'))
 dp = Dispatcher(bot=bot, storage=storage)
+
+def on_startup():
+    print("Бот успешно запущен")
+
