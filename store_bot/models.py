@@ -1,7 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import Column, Integer, Text, create_engine
 
-engine = create_engine('sqlite:///tg.db')
+engine = create_engine('sqlite:///store_bot.db')
 
 
 class Base(DeclarativeBase):
@@ -24,5 +24,3 @@ class Items(Base):
     price = Column(Integer)
     photo = Column(Text)
     type = Column(Text)
-
-

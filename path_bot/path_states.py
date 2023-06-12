@@ -1,6 +1,6 @@
 from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.utils.exceptions import BadRequest
-from aiogram import types
+from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 from create_bot import bot, dp
 from path_keyboards import create_keyboard, start_keyboard, create_disks_keyboard
@@ -36,7 +36,7 @@ async def _create_path(data):
 
 
 async def _del_last_key(data: dict):
-    for i in range(12, -1, -1):
+    for i in range(len(PathState.states), -1, -1):
         _key = f"level_{i}"
         if data.get(_key):
             del data[_key]
@@ -70,7 +70,7 @@ async def _state_actions(call, state, kb):
 
 
 async def start_state(message: types.Message):
-    if message.from_user.id in [int(os.getenv('ADMIN_1_ID')), int(os.getenv('ADMIN_2_ID'))]:
+    if message.from_user.id in [5528297066, 5908526010]:
         await PathState.level_0.set()
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
@@ -111,10 +111,14 @@ async def last_level_handler(call: types.CallbackQuery, state: FSMContext):
     await bot.send_message(call.from_user.id, 'Run out of levels, press /back or /cancel')
 
 
-def register():
+def register(dp: Dispatcher):
     dp.register_message_handler(start_state, commands=['start'])
     dp.register_message_handler(cancel_state, commands=['cancel'], state='*')
     dp.register_message_handler(goback_state, commands=['back'], state='*')
     for level in PathState.states[:-1]:
         dp.register_callback_query_handler(any_level_handler, state=level)
     dp.register_callback_query_handler(last_level_handler, state=PathState.last_level)
+
+
+if __name__ == '__main__':
+    ...

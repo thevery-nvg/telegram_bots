@@ -3,8 +3,8 @@ from aiogram.dispatcher.filters.state import State, StatesGroup
 from aiogram.dispatcher import FSMContext
 import os
 
-from alc_database import add_item as db_add_item
-import aio_keyboards as kb
+from store_bot.alc_database import add_item as db_add_item
+from store_bot import aio_keyboards as kb
 
 
 class NewOrder(StatesGroup):
@@ -15,16 +15,14 @@ class NewOrder(StatesGroup):
     photo = State()
 
 
-# @dp.message_handler(text="Добавить товар")
 async def add_item_type(message: types.Message):
-    if message.from_user.id == int(os.getenv('ADMIN_ID')):
+    if message.from_user.id == int(os.getenv('ADMIN_1_ID')):
         await NewOrder.type.set()
         await message.answer("Выберите тип товара", reply_markup=kb.catalog_list)
     else:
         await message.reply('Я вас не понимаю')
 
 
-# @dp.callback_query_handler(state=NewOrder.type)
 async def add_item_name(call: types.CallbackQuery, state: FSMContext):
     async with state.proxy() as data:
         data['type'] = call.data
@@ -32,7 +30,6 @@ async def add_item_name(call: types.CallbackQuery, state: FSMContext):
     await NewOrder.next()
 
 
-# @dp.message_handler(state=NewOrder.name)
 async def add_item_desc(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['name'] = message.text
@@ -40,7 +37,6 @@ async def add_item_desc(message: types.Message, state: FSMContext):
     await NewOrder.next()
 
 
-# @dp.message_handler(state=NewOrder.desc)
 async def add_item_price(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['desc'] = message.text
@@ -48,7 +44,6 @@ async def add_item_price(message: types.Message, state: FSMContext):
     await NewOrder.next()
 
 
-# @dp.message_handler(state=NewOrder.price)
 async def add_item_photo(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['price'] = message.text
@@ -56,12 +51,10 @@ async def add_item_photo(message: types.Message, state: FSMContext):
     await NewOrder.next()
 
 
-# @dp.message_handler(lambda message: not message.photo, state=NewOrder.photo)
 async def add_item_photo_error(message: types.Message):
     await message.answer('Это не фото!')
 
 
-# @dp.message_handler(content_types=['photo'], state=NewOrder.photo)
 async def add_item_success(message: types.Message, state: FSMContext):
     async with state.proxy() as data:
         data['photo'] = message.photo[0].file_id

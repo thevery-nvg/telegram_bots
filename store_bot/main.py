@@ -1,17 +1,20 @@
 from aiogram import executor, types
 
 import alc_database as db
-from create_bot import dp
+from common.create_bot import dp
 
 
 async def on_startup(_):
     await db.db_start()
-    print('Бот успешно запущен')
+    print(f'Бот успешно запущен')
 
 
 # Подгружаем юзер-хендлеры
 from handlers.admin.admin_main import register_admin_handlers
 from handlers import user, misc
+
+
+
 
 register_admin_handlers(dp)
 misc.register_misc_handlers(dp)
@@ -24,4 +27,6 @@ async def echo(message: types.Message):
 
 
 if __name__ == '__main__':
-    executor.start_polling(dp, on_startup=on_startup)
+    executor.start_polling(dp, on_startup=on_startup,on_shutdown=db.connection.close())
+
+
