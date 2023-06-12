@@ -70,7 +70,7 @@ async def _state_actions(call, state, kb):
 
 
 async def start_state(message: types.Message):
-    if message.from_user.id in [5528297066, 5908526010]:
+    if message.from_user.id ==os.getenv('ADMIN_ID'):
         await PathState.level_0.set()
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
