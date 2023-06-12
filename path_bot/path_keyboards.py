@@ -1,18 +1,16 @@
-import re
 from pathlib import Path
-import psutil
+from psutil import disk_partitions
 import os
 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
+from const import FOLDER_ICON, FILE_ICON, LARGE_FILE, D
 
 start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add('/start').insert('/back').insert('/cancel')
 
-from const import FOLDER_ICON, FILE_ICON, LARGE_FILE, D
-
 
 async def create_disks_keyboard():
-    disc_choose = InlineKeyboardMarkup(row_width=len(psutil.disk_partitions()))
-    for item in psutil.disk_partitions():
+    disc_choose = InlineKeyboardMarkup(row_width=len(disk_partitions()))
+    for item in disk_partitions():
         dev_hash = str(hash(item.device))
         D[dev_hash] = item.device
         disc_choose.insert(InlineKeyboardButton(item.device, callback_data=dev_hash))

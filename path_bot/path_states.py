@@ -22,6 +22,9 @@ class PathState(StatesGroup):
     level_9 = State()
     level_10 = State()
     level_11 = State()
+    level_12 = State()
+    level_13 = State()
+    level_14 = State()
     last_level = State()
 
 
@@ -66,9 +69,9 @@ async def _state_actions(call, state, kb):
         await PathState.next()
 
 
-async def start_state(message: types.Message, state: FSMContext):
+async def start_state(message: types.Message):
     if message.from_user.id in [int(os.getenv('ADMIN_1_ID')), int(os.getenv('ADMIN_2_ID'))]:
-        await state.set_state(PathState.level_0)
+        await PathState.level_0.set()
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
     else:
@@ -92,7 +95,7 @@ async def goback_state(message: types.Message, state: FSMContext):
             await PathState.previous()
             await bot.send_message(message.from_user.id, kb, reply_markup=await create_keyboard(kb))
         else:
-            await state.set_state(PathState.level_0)
+            await PathState.level_0.set()
             await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
 
 
@@ -105,24 +108,13 @@ async def any_level_handler(call: types.CallbackQuery, state: FSMContext):
 
 async def last_level_handler(call: types.CallbackQuery, state: FSMContext):
     await any_level_handler(call, state)
-    await state.finish()
-    await bot.send_message(call.from_user.id, 'Run out of levels')
+    await bot.send_message(call.from_user.id, 'Run out of levels, press /back or /cancel')
 
 
 def register():
     dp.register_message_handler(start_state, commands=['start'])
     dp.register_message_handler(cancel_state, commands=['cancel'], state='*')
     dp.register_message_handler(goback_state, commands=['back'], state='*')
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_0)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_1)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_2)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_3)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_4)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_5)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_6)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_7)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_8)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_9)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_10)
-    dp.register_callback_query_handler(any_level_handler, state=PathState.level_11)
+    for level in PathState.states[:-1]:
+        dp.register_callback_query_handler(any_level_handler, state=level)
     dp.register_callback_query_handler(last_level_handler, state=PathState.last_level)

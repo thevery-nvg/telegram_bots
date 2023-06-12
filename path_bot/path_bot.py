@@ -1,5 +1,5 @@
 from aiogram import executor
-from create_bot import bot, dp
+from create_bot import dp
 from path_states import register
 
 register()
