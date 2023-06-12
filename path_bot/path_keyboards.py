@@ -7,7 +7,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeybo
 
 start_keyboard = ReplyKeyboardMarkup(resize_keyboard=True).add('/start').insert('/back').insert('/cancel')
 
-from const import FOLDER_ICON,FILE_ICON,LARGE_FILE,D
+from const import FOLDER_ICON, FILE_ICON, LARGE_FILE, D
 
 
 async def create_disks_keyboard():
