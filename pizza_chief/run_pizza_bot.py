@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from user_handlers import register
+from admin import register_admin_handlers
+register_admin_handlers()
 register()
 
 if __name__ == '__main__':

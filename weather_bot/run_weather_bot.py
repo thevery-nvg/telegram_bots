@@ -1,6 +1,7 @@
-from common.create_bot import bot, dp, on_startup
+from common.create_bot import dp, on_startup
 from aiogram import executor, types
 from keyboards import get_location
+from weather import get_weather
 
 
 async def command_start(message: types.Message):
@@ -8,8 +9,10 @@ async def command_start(message: types.Message):
 
 
 async def position(message: types.Message):
-    pos = message.location
-    print(pos)
+    lat = message.location.latitude
+    lon = message.location.longitude
+    weather = get_weather(lat, lon)
+    await message.answer(weather.output())
 
 
 dp.register_message_handler(position, content_types=['location'])
