@@ -1,11 +1,11 @@
 from common.create_bot import dp, on_startup
 from aiogram import executor, types
-from keyboards import get_location
+from keyboards import get_location_button
 from weather import get_weather
 
 
 async def command_start(message: types.Message):
-    await message.answer('Hi', reply_markup=get_location)
+    await message.answer('Чтобы узнать погоду, отправьте свою геопозицию', reply_markup=get_location_button)
 
 
 async def position(message: types.Message):
