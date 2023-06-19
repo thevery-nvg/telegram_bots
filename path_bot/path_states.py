@@ -70,7 +70,7 @@ async def _state_actions(call, state, kb):
 
 
 async def start_state(message: types.Message):
-    if message.from_user.id ==os.getenv('ADMIN_ID'):
+    if message.from_user.id ==int(os.getenv('ADMIN_ID')):
         await PathState.level_0.set()
         await bot.send_message(message.from_user.id, "Начнем!", reply_markup=start_keyboard)
         await message.answer('Выберите диск', reply_markup=await create_disks_keyboard())
@@ -111,7 +111,7 @@ async def last_level_handler(call: types.CallbackQuery, state: FSMContext):
     await bot.send_message(call.from_user.id, 'Run out of levels, press /back or /cancel')
 
 
-def register(dp: Dispatcher):
+def register_handlers(dp: Dispatcher):
     dp.register_message_handler(start_state, commands=['start'])
     dp.register_message_handler(cancel_state, commands=['cancel'], state='*')
     dp.register_message_handler(goback_state, commands=['back'], state='*')
